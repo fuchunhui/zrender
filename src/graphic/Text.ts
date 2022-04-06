@@ -665,6 +665,16 @@ class ZRText extends Displayable<TextProps> implements GroupLike {
             let rightIndex = tokenCount - 1;
             let token;
 
+            if (verticalAlign === 'middle') {
+                lineTop = 0;
+            }
+            else if (verticalAlign === 'top') {
+                lineTop += lineHeight / 2;
+            }
+            else if (verticalAlign === 'bottom') {
+                lineTop += (style.height || lineHeight) - lineHeight / 2;
+            }
+
             while (
                 leftIndex < tokenCount
                 && (token = tokens[leftIndex], !token.align || token.align === 'left')
@@ -717,12 +727,13 @@ class ZRText extends Displayable<TextProps> implements GroupLike {
         // 'ctx.textBaseline' is always set as 'middle', for sake of
         // the bias of "Microsoft YaHei".
         const verticalAlign = token.verticalAlign;
-        let y = lineTop + lineHeight / 2;
+
+        let y = lineTop;
         if (verticalAlign === 'top') {
             y = lineTop + token.height / 2;
         }
         else if (verticalAlign === 'bottom') {
-            y = lineTop + lineHeight - token.height / 2;
+            y = lineTop - lineHeight + token.height / 2;
         }
 
         const needDrawBg = !token.isLineHolder && needDrawBackground(tokenStyle);
